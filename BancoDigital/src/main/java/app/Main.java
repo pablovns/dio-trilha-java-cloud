@@ -1,3 +1,7 @@
+package app;
+
+import exception.*;
+import model.*;
 
 public class Main {
 
@@ -9,9 +13,13 @@ public class Main {
 		Conta poupanca = new ContaPoupanca(venilton);
 
 		cc.depositar(100);
-		cc.transferir(100, poupanca);
-		
-		cc.imprimirExtrato();
+        try {
+            cc.transferir(100, poupanca);
+        } catch (SaldoInsuficienteException e) {
+			System.out.println(e.getMessage());
+        }
+
+        cc.imprimirExtrato();
 		poupanca.imprimirExtrato();
 	}
 
