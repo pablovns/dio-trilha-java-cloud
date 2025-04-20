@@ -17,6 +17,12 @@ public class ContaCorrente extends Conta {
 		this.limiteChequeEspecial = limiteChequeEspecial;
 	}
 
+	public ContaCorrente(Cliente cliente, boolean possuiChequeEspecial) {
+		super(cliente);
+		this.possuiChequeEspecial = possuiChequeEspecial;
+		this.limiteChequeEspecial = 500;
+	}
+
 	public ContaCorrente(Cliente cliente) {
 		super(cliente);
 		this.possuiChequeEspecial = false;
