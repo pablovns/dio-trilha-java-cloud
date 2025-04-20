@@ -15,6 +15,7 @@ import java.util.List;
 public abstract class Conta implements IConta {
 
 	private static final int AGENCIA_PADRAO = 1;
+	public static final String O_VALOR_DEVE_SER_MAIOR_QUE_ZERO = "O valor deve ser maior que zero.";
 	private static int contador = 1;
 
 	private final int id;
@@ -33,6 +34,9 @@ public abstract class Conta implements IConta {
 
 	@Override
 	public void depositar(double valor) {
+		if (valor <= 0) {
+			throw new IllegalArgumentException(O_VALOR_DEVE_SER_MAIOR_QUE_ZERO);
+		}
 		final TipoTransacao tipoTransacao = TipoTransacao.DEPOSITO;
 		saldo += valor;
 		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
@@ -40,6 +44,9 @@ public abstract class Conta implements IConta {
 
 	@Override
 	public void sacar(double valor) throws SaldoInsuficienteException {
+		if (valor <= 0) {
+			throw new IllegalArgumentException(O_VALOR_DEVE_SER_MAIOR_QUE_ZERO);
+		}
 		final TipoTransacao tipoTransacao = TipoTransacao.SAQUE;
 		if (valor > saldo) {
 			throw new SaldoInsuficienteException(saldo, valor - saldo);
@@ -49,11 +56,18 @@ public abstract class Conta implements IConta {
 	}
 
 	@Override
-	public void transferir(double valor, IConta contaDestino) throws SaldoInsuficienteException {
+	public void transferir(double valor, IConta contaDestino) {
+		if (valor <= 0) {
+			throw new IllegalArgumentException(O_VALOR_DEVE_SER_MAIOR_QUE_ZERO);
+		}
 		final TipoTransacao tipoTransacao = TipoTransacao.TRANSFERENCIA;
-		sacar(valor + valor * tipoTransacao.getTaxa()); // desconta a taxa definida na transação
-		contaDestino.depositar(valor);
-		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
+        try {
+            sacar(valor + valor * tipoTransacao.getTaxa()); // desconta a taxa definida na transação
+			contaDestino.depositar(valor);
+			adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
+		} catch (SaldoInsuficienteException e) {
+			System.out.println("Não foi possível realizar a transferência. Saldo insuficiente.");
+		}
 	}
 
 	private void adicionarTransacao(Transacao transacao) {
