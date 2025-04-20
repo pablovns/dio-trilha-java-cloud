@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,9 +24,11 @@ public abstract class Conta implements IConta {
 	private List<Transacao> transacoes;
 
 	protected Conta(Cliente cliente) {
-		this.agencia = AGENCIA_PADRAO;
 		this.id = contador++;
 		this.cliente = cliente;
+		this.agencia = AGENCIA_PADRAO;
+		this.saldo = 0;
+		this.transacoes = new ArrayList<>();
 	}
 
 	@Override
