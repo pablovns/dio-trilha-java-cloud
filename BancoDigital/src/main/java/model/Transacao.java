@@ -16,10 +16,11 @@ public class Transacao {
     private TipoTransacao tipoTransacao;
     private double valor;
 
-    public Transacao(LocalDateTime data, TipoTransacao tipoTransacao) {
+    public Transacao(LocalDateTime data, TipoTransacao tipoTransacao, double valor) {
         this.id = contador++;
         this.data = data;
         this.tipoTransacao = tipoTransacao;
+        this.valor = valor;
     }
 
     @Override

@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -15,14 +16,14 @@ public abstract class Conta implements IConta {
 	private static final int AGENCIA_PADRAO = 1;
 	private static int contador = 1;
 
-	private int id;
+	private final int id;
+	private final Cliente cliente;
 	private int agencia;
-	private Cliente cliente;
 	private double saldo;
 	private List<Transacao> transacoes;
 
 	protected Conta(Cliente cliente) {
-		this.agencia = Conta.AGENCIA_PADRAO;
+		this.agencia = AGENCIA_PADRAO;
 		this.id = contador++;
 		this.cliente = cliente;
 	}
@@ -30,6 +31,7 @@ public abstract class Conta implements IConta {
 	@Override
 	public void depositar(double valor) {
 		saldo += valor;
+		adicionarTransacao(new Transacao(LocalDateTime.now(), TipoTransacao.DEPOSITO, valor));
 	}
 
 	@Override
@@ -38,12 +40,18 @@ public abstract class Conta implements IConta {
 			throw new SaldoInsuficienteException(saldo, valor - saldo);
 		}
 		saldo -= valor;
+		adicionarTransacao(new Transacao(LocalDateTime.now(), TipoTransacao.SAQUE, valor));
 	}
 
 	@Override
 	public void transferir(double valor, IConta contaDestino) throws SaldoInsuficienteException {
 		sacar(valor);
 		contaDestino.depositar(valor);
+		adicionarTransacao(new Transacao(LocalDateTime.now(), TipoTransacao.TRANSFERENCIA, valor));
+	}
+
+	private void adicionarTransacao(Transacao transacao) {
+		transacoes.add(transacao);
 	}
 
 	public void imprimirInformacoes() {
