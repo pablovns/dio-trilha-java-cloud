@@ -4,6 +4,9 @@ import exception.SaldoInsuficienteException;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Comparator;
+import java.util.List;
+
 @Getter
 @Setter
 public abstract class Conta implements IConta {
@@ -15,6 +18,7 @@ public abstract class Conta implements IConta {
 	protected int agencia;
 	protected Cliente cliente;
 	protected double saldo;
+	protected List<Transacao> transacoes;
 
 	protected Conta(Cliente cliente) {
 		this.agencia = Conta.AGENCIA_PADRAO;
@@ -46,5 +50,15 @@ public abstract class Conta implements IConta {
 		System.out.printf("Titular: %s%n", cliente.getNome());
 		System.out.printf("Agencia: %d%n", agencia);
 		System.out.printf("Saldo: %.2f%n", saldo);
+	}
+
+	@Override
+	public void imprimirExtrato() {
+		Comparator<Transacao> porData = Comparator.comparing(Transacao::getData).reversed();
+		List<Transacao> transacoesOrdenadas = transacoes.stream().sorted(porData).toList();
+
+		for (Transacao transacao : transacoesOrdenadas) {
+			System.out.println(transacao);
+		}
 	}
 }

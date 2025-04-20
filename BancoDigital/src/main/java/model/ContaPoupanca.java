@@ -23,4 +23,10 @@ public class ContaPoupanca extends Conta {
 		System.out.println("=== Informações - Conta Poupança ===");
 		super.imprimirInformacoes();
 	}
+
+	@Override
+	public void imprimirExtrato() {
+		System.out.println("=== Extrato - Conta Poupança ===");
+		super.imprimirExtrato();
+	}
 }
