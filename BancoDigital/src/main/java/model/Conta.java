@@ -1,24 +1,25 @@
 package model;
 
 import exception.SaldoInsuficienteException;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Comparator;
 import java.util.List;
 
-@Getter
-@Setter
+@Getter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PROTECTED)
 public abstract class Conta implements IConta {
 
 	private static final int AGENCIA_PADRAO = 1;
 	private static int contador = 1;
 
-	protected int id;
-	protected int agencia;
-	protected Cliente cliente;
-	protected double saldo;
-	protected List<Transacao> transacoes;
+	private int id;
+	private int agencia;
+	private Cliente cliente;
+	private double saldo;
+	private List<Transacao> transacoes;
 
 	protected Conta(Cliente cliente) {
 		this.agencia = Conta.AGENCIA_PADRAO;
@@ -48,7 +49,7 @@ public abstract class Conta implements IConta {
 	public void imprimirInformacoes() {
 		System.out.printf("Id: %d%n", id);
 		System.out.printf("Titular: %s%n", cliente.getNome());
-		System.out.printf("Agencia: %d%n", agencia);
+		System.out.printf("Agência: %d%n", agencia);
 		System.out.printf("Saldo: %.2f%n", saldo);
 	}
 

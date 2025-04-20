@@ -19,8 +19,8 @@ public class ContaCorrente extends Conta {
 
 	@Override
 	public void sacar(double valor) throws SaldoInsuficienteException {
-		if (valor > saldo + limiteChequeEspecial) {
-			throw new SaldoInsuficienteException(saldo, valor - (saldo + limiteChequeEspecial));
+		if (valor > getSaldo() + limiteChequeEspecial) {
+			throw new SaldoInsuficienteException(getSaldo(), valor - (getSaldo() + limiteChequeEspecial));
 		} else {
 			super.sacar(valor);
 		}
