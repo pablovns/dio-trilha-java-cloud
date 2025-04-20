@@ -33,24 +33,27 @@ public abstract class Conta implements IConta {
 
 	@Override
 	public void depositar(double valor) {
+		final TipoTransacao tipoTransacao = TipoTransacao.DEPOSITO;
 		saldo += valor;
-		adicionarTransacao(new Transacao(LocalDateTime.now(), TipoTransacao.DEPOSITO, valor));
+		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
 	}
 
 	@Override
 	public void sacar(double valor) throws SaldoInsuficienteException {
+		final TipoTransacao tipoTransacao = TipoTransacao.SAQUE;
 		if (valor > saldo) {
 			throw new SaldoInsuficienteException(saldo, valor - saldo);
 		}
 		saldo -= valor;
-		adicionarTransacao(new Transacao(LocalDateTime.now(), TipoTransacao.SAQUE, valor));
+		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
 	}
 
 	@Override
 	public void transferir(double valor, IConta contaDestino) throws SaldoInsuficienteException {
-		sacar(valor);
+		final TipoTransacao tipoTransacao = TipoTransacao.TRANSFERENCIA;
+		sacar(valor + valor * tipoTransacao.getTaxa()); // desconta a taxa definida na transação
 		contaDestino.depositar(valor);
-		adicionarTransacao(new Transacao(LocalDateTime.now(), TipoTransacao.TRANSFERENCIA, valor));
+		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
 	}
 
 	private void adicionarTransacao(Transacao transacao) {
