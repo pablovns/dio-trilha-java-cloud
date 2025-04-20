@@ -19,8 +19,8 @@ public class ContaPoupanca extends Conta {
 	}
 
 	@Override
-	public void imprimirExtrato() {
-		System.out.println("=== Extrato model.Conta Poupança ===");
+	public void imprimirInformacoes() {
+		System.out.println("=== Informações - Conta Poupança ===");
 		super.imprimirInformacoes();
 	}
 }

@@ -41,7 +41,7 @@ public abstract class Conta implements IConta {
 		contaDestino.depositar(valor);
 	}
 
-	protected void imprimirInformacoes() {
+	public void imprimirInformacoes() {
 		System.out.printf("Id: %d%n", id);
 		System.out.printf("Titular: %s%n", cliente.getNome());
 		System.out.printf("Agencia: %d%n", agencia);

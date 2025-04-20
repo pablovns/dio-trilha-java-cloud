@@ -24,8 +24,8 @@ public class ContaCorrente extends Conta {
 	}
 
 	@Override
-	public void imprimirExtrato() {
-		System.out.println("=== Extrato model.Conta Corrente ===");
+	public void imprimirInformacoes() {
+		System.out.println("=== Informações - Conta Corrente ===");
 		super.imprimirInformacoes();
 	}
 	
