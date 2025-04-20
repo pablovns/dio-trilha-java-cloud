@@ -17,9 +17,16 @@ public class ContaCorrente extends Conta {
 		this.limiteChequeEspecial = limiteChequeEspecial;
 	}
 
+	public ContaCorrente(Cliente cliente) {
+		super(cliente);
+		this.possuiChequeEspecial = false;
+		this.limiteChequeEspecial = 0.0;
+	}
+
 	@Override
 	public void sacar(double valor) throws SaldoInsuficienteException {
-		if (valor > getSaldo() + limiteChequeEspecial) {
+		double saldoDisponivel = possuiChequeEspecial ? getSaldo() + limiteChequeEspecial : getSaldo();
+		if (valor > saldoDisponivel) {
 			throw new SaldoInsuficienteException(getSaldo(), valor - (getSaldo() + limiteChequeEspecial));
 		} else {
 			super.sacar(valor);
