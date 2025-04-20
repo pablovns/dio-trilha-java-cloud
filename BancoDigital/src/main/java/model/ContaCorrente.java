@@ -1,25 +1,28 @@
 package model;
 
 import exception.SaldoInsuficienteException;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ContaCorrente extends Conta {
 
 	private boolean possuiChequeEspecial;
 	private double limiteChequeEspecial;
 
-	public ContaCorrente(Cliente cliente) {
+	public ContaCorrente(Cliente cliente, boolean possuiChequeEspecial, double limiteChequeEspecial) {
 		super(cliente);
-	}
-
-	@Override
-	public void depositar(double valor) {
-
+		this.possuiChequeEspecial = possuiChequeEspecial;
+		this.limiteChequeEspecial = limiteChequeEspecial;
 	}
 
 	@Override
 	public void sacar(double valor) throws SaldoInsuficienteException {
 		if (valor > saldo + limiteChequeEspecial) {
 			throw new SaldoInsuficienteException(saldo, valor - (saldo + limiteChequeEspecial));
+		} else {
+			super.sacar(valor);
 		}
 	}
 
@@ -27,6 +30,12 @@ public class ContaCorrente extends Conta {
 	public void imprimirInformacoes() {
 		System.out.println("=== Informações - Conta Corrente ===");
 		super.imprimirInformacoes();
+	}
+
+	@Override
+	public void imprimirExtrato() {
+		System.out.println("=== Extrato - Conta Corrente ===");
+		super.imprimirExtrato();
 	}
 	
 }
