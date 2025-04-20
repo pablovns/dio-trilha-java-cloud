@@ -9,16 +9,6 @@ public class ContaPoupanca extends Conta {
 	}
 
 	@Override
-	public void sacar(double valor) throws SaldoInsuficienteException {
-
-	}
-
-	@Override
-	public void depositar(double valor) {
-
-	}
-
-	@Override
 	public void imprimirInformacoes() {
 		System.out.println("=== Informações - Conta Poupança ===");
 		super.imprimirInformacoes();
