@@ -49,7 +49,7 @@ public abstract class Conta implements IConta {
 		}
 		final TipoTransacao tipoTransacao = TipoTransacao.SAQUE;
 		if (valor > saldo) {
-			throw new SaldoInsuficienteException(saldo, valor - saldo);
+			throw new SaldoInsuficienteException(TipoTransacao.SAQUE, saldo, valor - saldo);
 		}
 		saldo -= valor;
 		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));

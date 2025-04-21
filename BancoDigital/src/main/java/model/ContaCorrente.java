@@ -33,7 +33,7 @@ public class ContaCorrente extends Conta {
 	public void sacar(double valor) throws SaldoInsuficienteException {
 		double saldoDisponivel = possuiChequeEspecial ? getSaldo() + limiteChequeEspecial : getSaldo();
 		if (valor > saldoDisponivel) {
-			throw new SaldoInsuficienteException(getSaldo(), valor - (getSaldo() + limiteChequeEspecial));
+			throw new SaldoInsuficienteException(TipoTransacao.SAQUE, getSaldo(), valor - (getSaldo() + limiteChequeEspecial));
 		} else {
 			super.sacar(valor);
 		}
