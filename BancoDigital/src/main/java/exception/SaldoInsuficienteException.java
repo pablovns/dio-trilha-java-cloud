@@ -1,14 +1,17 @@
 package exception;
 
 import lombok.Getter;
+import model.TipoTransacao;
 
 @Getter
 public class SaldoInsuficienteException extends Exception {
+    private final TipoTransacao tipoTransacao;
     private final double saldoAtual;
     private final double valorFaltando;
 
-    public SaldoInsuficienteException(double saldoAtual, double valorFaltando) {
-        super("Tentativa de saque de R$ " + valorFaltando + " com saldo de R$ " + saldoAtual);
+    public SaldoInsuficienteException(TipoTransacao tipoTransacao, double saldoAtual, double valorFaltando) {
+        super("Tentativa de %s de R$ %.2f com saldo de R$ %.2f".formatted(tipoTransacao.getDescricao(), valorFaltando, saldoAtual));
+        this.tipoTransacao = tipoTransacao;
         this.saldoAtual = saldoAtual;
         this.valorFaltando = valorFaltando;
     }
