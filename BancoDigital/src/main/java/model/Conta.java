@@ -56,18 +56,25 @@ public abstract class Conta implements IConta {
 	}
 
 	@Override
-	public void transferir(double valor, IConta contaDestino) {
+	public void transferir(double valor, IConta contaDestino) throws SaldoInsuficienteException {
 		if (valor <= 0) {
 			throw new IllegalArgumentException(O_VALOR_DEVE_SER_MAIOR_QUE_ZERO);
 		}
+
 		final TipoTransacao tipoTransacao = TipoTransacao.TRANSFERENCIA;
-        try {
-            sacar(valor + valor * tipoTransacao.getTaxa()); // desconta a taxa definida na transação
-			contaDestino.depositar(valor);
-			adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
-		} catch (SaldoInsuficienteException e) {
+		final double valorTaxa = valor * tipoTransacao.getTaxa();
+		final double valorTotal = valor + valorTaxa;
+
+		if (valorTotal > saldo) {
 			System.out.println("Não foi possível realizar a transferência. Saldo insuficiente.");
+			throw new SaldoInsuficienteException(TipoTransacao.TRANSFERENCIA, saldo, valorTotal - saldo);
 		}
+
+		saldo -= valorTotal;
+		Conta contaDestinoCast = (Conta) contaDestino;
+		contaDestinoCast.setSaldo(valor);
+
+		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
 	}
 
 	private void adicionarTransacao(Transacao transacao) {
