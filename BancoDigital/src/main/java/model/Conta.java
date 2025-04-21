@@ -77,7 +77,7 @@ public abstract class Conta implements IConta {
 		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
 	}
 
-	private void adicionarTransacao(Transacao transacao) {
+	public void adicionarTransacao(Transacao transacao) {
 		transacoes.add(transacao);
 	}
 

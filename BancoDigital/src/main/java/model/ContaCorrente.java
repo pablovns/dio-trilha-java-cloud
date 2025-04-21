@@ -4,6 +4,8 @@ import exception.SaldoInsuficienteException;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class ContaCorrente extends Conta {
@@ -31,11 +33,22 @@ public class ContaCorrente extends Conta {
 
 	@Override
 	public void sacar(double valor) throws SaldoInsuficienteException {
+		final TipoTransacao tipoTransacao = TipoTransacao.SAQUE;
+
+		validaSaldoSuficiente(valor);
+		setSaldo(getSaldo() - valor);
+		adicionarTransacao(new Transacao(LocalDateTime.now(), tipoTransacao, valor, tipoTransacao.getTaxa()));
+	}
+
+	private void validaSaldoSuficiente(double valor) throws SaldoInsuficienteException {
+		if (valor <= 0) {
+			throw new IllegalArgumentException(O_VALOR_DEVE_SER_MAIOR_QUE_ZERO);
+		}
+
+		final TipoTransacao tipoTransacao = TipoTransacao.SAQUE;
 		double saldoDisponivel = possuiChequeEspecial ? getSaldo() + limiteChequeEspecial : getSaldo();
 		if (valor > saldoDisponivel) {
-			throw new SaldoInsuficienteException(TipoTransacao.SAQUE, getSaldo(), valor - (getSaldo() + limiteChequeEspecial));
-		} else {
-			super.sacar(valor);
+			throw new SaldoInsuficienteException(tipoTransacao, getSaldo(), valor - (getSaldo() + limiteChequeEspecial));
 		}
 	}
 
